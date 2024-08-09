@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://svi5642w7e1"]
+[gd_scene load_steps=13 format=3 uid="uid://svi5642w7e1"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_c7uqj"]
 [ext_resource type="Texture2D" uid="uid://c2uajfksyikj3" path="res://Player2.png" id="1_l7acm"]
@@ -129,6 +129,9 @@ _data = {
 "Walk": SubResource("Animation_7ve6j")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i7rvi"]
+size = Vector2(16, 27)
+
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 3
 script = ExtResource("1_c7uqj")
@@ -147,3 +150,12 @@ shape = SubResource("RectangleShape2D_4plnv")
 libraries = {
 "": SubResource("AnimationLibrary_artmf")
 }
+
+[node name="RoomDetector" type="Area2D" parent="."]
+collision_mask = 128
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomDetector"]
+position = Vector2(0, 2.5)
+shape = SubResource("RectangleShape2D_i7rvi")
+
+[connection signal="area_entered" from="RoomDetector" to="." method="_on_RoomDetector_area_entered"]

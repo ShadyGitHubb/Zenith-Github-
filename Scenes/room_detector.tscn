@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://cu4pjvbwv310c"]
+
+[ext_resource type="Script" path="res://Scripts/RoomDetector.gd" id="1_i5wyb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8yryd"]
+
+[node name="RoomDetector" type="Area2D" groups=["roomDetector"]]
+script = ExtResource("1_i5wyb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_8yryd")

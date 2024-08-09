@@ -23,7 +23,6 @@ scale = Vector2(2.85326, 2.71064)
 script = ExtResource("1_nu2t0")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-visible = false
 material = SubResource("ShaderMaterial_tuol0")
 layout_mode = 0
 offset_left = -4.0
