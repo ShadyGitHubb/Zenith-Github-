@@ -136,10 +136,10 @@ tracks/1/path = NodePath("Spritesheet:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [0, 2, 3, 4, 5]
+"values": [0, 1, 2, 3, 4, 5]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_artmf"]
@@ -174,6 +174,7 @@ shape = SubResource("RectangleShape2D_4plnv")
 libraries = {
 "": SubResource("AnimationLibrary_artmf")
 }
+speed_scale = 2.0
 
 [node name="RoomDetector" type="Area2D" parent="."]
 collision_mask = 128
