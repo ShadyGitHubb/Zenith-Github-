@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bm0dp435es68t" path="res://Sprites/Ground/spritesheet.png" id="2_gawql"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4plnv"]
-size = Vector2(10.5, 27)
+size = Vector2(17, 27)
 
 [sub_resource type="Animation" id="Animation_51yqo"]
 resource_name = "Dead"
@@ -154,7 +154,7 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i7rvi"]
-size = Vector2(10.7, 27)
+size = Vector2(17, 27)
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 3
@@ -167,7 +167,7 @@ texture = ExtResource("2_gawql")
 hframes = 6
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-1.75, 3)
+position = Vector2(-1.5, 3)
 shape = SubResource("RectangleShape2D_4plnv")
 
 [node name="anim" type="AnimationPlayer" parent="."]
@@ -180,7 +180,7 @@ speed_scale = 2.0
 collision_mask = 128
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoomDetector"]
-position = Vector2(-2, 3)
+position = Vector2(-1.5, 3)
 shape = SubResource("RectangleShape2D_i7rvi")
 
 [connection signal="area_entered" from="RoomDetector" to="." method="_on_RoomDetector_area_entered"]

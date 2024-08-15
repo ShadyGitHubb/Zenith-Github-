@@ -86,13 +86,6 @@ zoom = Vector2(6, 6)
 position_smoothing_enabled = true
 position_smoothing_speed = 2.0
 
-[node name="PauseMenu" parent="Player" instance=ExtResource("3_n1p1p")]
-offset_left = -17.0
-offset_top = -41.0
-offset_right = -14.0
-offset_bottom = -41.0
-scale = Vector2(2.45326, 1.55064)
-
 [node name="Ground" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_4ekrm")
 format = 2
@@ -113,6 +106,7 @@ layer_0/tile_data = PackedInt32Array(524291, 65536, 0, 524290, 65536, 0, 524289,
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Lighting" type="ColorRect" parent="CanvasLayer"]
+visible = false
 material = SubResource("ShaderMaterial_25brn")
 offset_left = -111.0
 offset_top = -187.0
@@ -120,3 +114,10 @@ offset_right = 645.0
 offset_bottom = 469.0
 scale = Vector2(10.8625, 2.63018)
 script = ExtResource("8_g8pcl")
+
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("3_n1p1p")]
+offset_left = -788.0
+offset_top = -173.0
+offset_right = -785.0
+offset_bottom = -173.0
+scale = Vector2(2.45326, 1.55064)
