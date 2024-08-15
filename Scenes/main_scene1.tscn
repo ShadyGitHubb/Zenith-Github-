@@ -1,8 +1,55 @@
-[gd_scene load_steps=2 format=3 uid="uid://drk71di07uovl"]
+[gd_scene load_steps=7 format=3 uid="uid://drk71di07uovl"]
 
 [ext_resource type="PackedScene" uid="uid://svi5642w7e1" path="res://Scenes/Player/player.tscn" id="1_buqh3"]
+[ext_resource type="Texture2D" uid="uid://b8tubvxh5hotc" path="res://Sprites/Ground/pixil-frame-0.png" id="2_xcqgb"]
+[ext_resource type="PackedScene" uid="uid://cevy3dmocjlao" path="res://pause_menu.tscn" id="3_n1p1p"]
+[ext_resource type="PackedScene" uid="uid://cs0lt7vpve6fx" path="res://Scripts/title_screen.tscn" id="4_picqr"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_47233"]
+texture = ExtResource("2_xcqgb")
+0:0/0 = 0
+0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:0/0/physics_layer_0/angular_velocity = 0.0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:0/0 = 0
+1:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:0/0/physics_layer_0/angular_velocity = 0.0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:1/0 = 0
+0:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:1/0/physics_layer_0/angular_velocity = 0.0
+1:1/0 = 0
+1:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:1/0/physics_layer_0/angular_velocity = 0.0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSet" id="TileSet_4ekrm"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_47233")
 
 [node name="Node2D" type="Node2D"]
 
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(203, 121)
+zoom = Vector2(2.8, 2.8)
+
 [node name="Player" parent="." instance=ExtResource("1_buqh3")]
-position = Vector2(72, 68)
+position = Vector2(127, 162)
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_4ekrm")
+format = 2
+layer_0/tile_data = PackedInt32Array(786432, 0, 0, 786433, 0, 0, 786434, 0, 0, 786435, 0, 0, 786436, 0, 0, 786437, 0, 0, 786438, 0, 0, 786439, 0, 0, 786440, 0, 0, 786441, 0, 0, 786442, 0, 0, 786443, 0, 0, 786444, 0, 0, 786445, 0, 0, 786446, 0, 0, 786447, 0, 0, 786448, 0, 0, 786449, 0, 0, 786450, 0, 0, 458752, 0, 0, 458753, 0, 0, 458754, 0, 0, 458755, 0, 0, 458756, 0, 0, 524287, 0, 0, 589823, 0, 0, 655359, 0, 0, 720895, 0, 0, 786431, 0, 0, 720906, 0, 0, 655370, 0, 0, 589834, 0, 0, 524298, 0, 0, 458762, 0, 0, 393226, 0, 0, 393227, 0, 0, 393228, 0, 0, 393229, 0, 0, 393230, 0, 0, 393231, 0, 0, 393232, 0, 0, 393233, 0, 0, 393234, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 6, 0, 0, 7, 0, 0, 8, 0, 0, 9, 0, 0, 10, 0, 0, 11, 0, 0, 12, 0, 0, 13, 0, 0, 14, 0, 0, 15, 0, 0, 16, 0, 0, 17, 0, 0, 18, 0, 0, 19, 0, 0, 20, 0, 0, 21, 0, 0, 22, 0, 0, 23, 0, 0, 24, 0, 0, 25, 0, 0, 0, 0, 0, 65535, 0, 0, 131071, 0, 0, 196607, 0, 0, 262143, 0, 0, 327679, 0, 0, 393215, 0, 0, 458751, 0, 0, 851967, 0, 0, 524292, 0, 0, 524293, 0, 0)
+
+[node name="TitleScreen" parent="." instance=ExtResource("4_picqr")]
+offset_left = -4.0
+offset_top = -8.0
+offset_right = -4.0
+offset_bottom = -8.0
+
+[node name="PauseMenu" parent="." instance=ExtResource("3_n1p1p")]
+offset_left = 7.0
+offset_top = 97.0
+offset_right = 10.0
+offset_bottom = 97.0
+scale = Vector2(2.45326, 1.55064)

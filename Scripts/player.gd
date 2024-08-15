@@ -26,7 +26,7 @@ func Move(delta):
 		velocity.x = lerp(velocity.x, speed * -direction, 0.1)
 		if Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_right"):
 			$anim.play("Walk")
-		$Sprite2D.scale.x = -direction
+		$Spritesheet.scale.x = -direction
 
 	elif not is_on_floor():
 		velocity.x = lerp(velocity.x, 0.0, 0.01)
