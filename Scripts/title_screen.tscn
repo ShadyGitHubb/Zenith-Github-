@@ -15,19 +15,19 @@ script = ExtResource("1_goxhs")
 
 [node name="StartButton" type="Button" parent="."]
 layout_mode = 0
-offset_left = 473.0
-offset_top = 187.0
-offset_right = 689.0
-offset_bottom = 268.0
+offset_left = 479.0
+offset_top = 228.0
+offset_right = 695.0
+offset_bottom = 309.0
 theme = SubResource("Theme_oe8c4")
 text = "Start"
 
 [node name="QuitButton" type="Button" parent="."]
 layout_mode = 0
-offset_left = 473.0
-offset_top = 309.0
-offset_right = 689.0
-offset_bottom = 390.0
+offset_left = 481.0
+offset_top = 440.0
+offset_right = 697.0
+offset_bottom = 521.0
 theme = SubResource("Theme_oe8c4")
 text = "Quit
 "
