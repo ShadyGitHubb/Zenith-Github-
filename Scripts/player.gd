@@ -9,7 +9,7 @@ var jump_count = 1
 var max_jumps = 2
 var pressed = 2
 
-@onready var current_area = get_node("/root/MainScene/Level 1")
+@onready var current_area = get_node("/root/MainScene1")
 @onready var global = get_node("/root/Global")
 
 func _physics_process(delta):
@@ -25,8 +25,8 @@ func Move(delta):
 	if direction:
 		velocity.x = lerp(velocity.x, speed * -direction, 0.1)
 		if Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_right"):
-			$anim.play("Walk")
-		$Spritesheet.scale.x = -direction
+			$AnimatedSprite2D.play("Walk")
+		$AnimatedSprite2D.scale.x = -direction
 
 	elif not is_on_floor():
 		velocity.x = lerp(velocity.x, 0.0, 0.01)
@@ -34,10 +34,10 @@ func Move(delta):
 		velocity.x = lerp(velocity.x, 0.0, 0.1)
 
 	if direction > 0:
-		$anim
+		$AnimatedSprite2D
 
 	if not Input.is_anything_pressed():
-		$anim.play("Idle")
+		$AnimatedSprite2D.play("Idle")
 	
 	if Input.is_action_just_pressed("ui_jump"):
 		pressed -= 1
@@ -45,25 +45,25 @@ func Move(delta):
 		
 	if Input.is_action_just_pressed("ui_jump") and max_jumps > jump_count:
 		velocity.y = jump
-		$anim.play("Jump")
+		$AnimatedSprite2D.play("Jump")
 		jump_count = jump_count + 1
 
 	if is_on_floor():
 		jump_count = 1
 
 	if !is_on_floor():
-		$anim.play("Jump")
+		$AnimatedSprite2D.play("Jump")
 		
 	if !is_on_floor() && velocity.y > 10:
-		$anim.play("Fall")
+		$AnimatedSprite2D.play("Fall")
 		
 func _ready():
 	NavigationManager.on_trigger_player_spawn.connect(_on_spawn)
 	
 func _on_spawn(position: Vector2, direction: String):
 	global_position = position
-	$anim.play("Walk" + direction)
-	$anim.stop()
+	$AnimatedSprite2D.play("Walk" + direction)
+	$AnimatedSprite2D.stop()
 
 func _on_RoomDetector_area_entered(area: Area2D) -> void:
 	print("1", global.current_area)
@@ -80,4 +80,8 @@ func _on_RoomDetector_area_entered(area: Area2D) -> void:
 		global.camera_change = true
  	
 	# Changes camera's current room and size. check camera script for more info
-	
+
+func _on_room_detector_area_entered(area):
+	if area.has_meta("Death"):
+		print("ye")
+		get_tree().reload_current_scene()

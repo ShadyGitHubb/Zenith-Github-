@@ -1,6 +1,6 @@
 extends Node
 
-const scene_main_scene = preload("res://Scenes/main_scene.tscn")
+const scene_main_scene1 = preload("res://Scenes/main_scene1.tscn")
 const scene_level2 = preload("res://level_2.tscn")
 
 signal on_trigger_player_spawn
@@ -11,8 +11,8 @@ func go_to_level(level_tag, destination_tag):
 	var scene_to_load
 	
 	match level_tag:
-		"main_scene":
-			scene_to_load = scene_main_scene
+		"main_scene1":
+			scene_to_load = scene_main_scene1
 		"level2":
 			scene_to_load = scene_level2
 			
