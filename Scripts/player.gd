@@ -4,7 +4,7 @@ class_name Player
 
 var speed = 100.0
 var gravity = 9.8
-var jump = -220
+var jump = -200
 var jump_count = 1
 var max_jumps = 2
 var pressed = 2
