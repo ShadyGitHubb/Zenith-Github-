@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 class_name Player
 
-var speed = 100.0
+var speed = 80.0
 var gravity = 9.8
 var jump = -200
 var jump_count = 1
@@ -57,8 +57,6 @@ func Move(delta):
 	if !is_on_floor() && velocity.y > 10:
 		$AnimatedSprite2D.play("Fall")
 		
-func _ready():
-	NavigationManager.on_trigger_player_spawn.connect(_on_spawn)
 	
 func _on_spawn(position: Vector2, direction: String):
 	global_position = position
@@ -85,3 +83,6 @@ func _on_room_detector_area_entered(area):
 	if area.has_meta("Death"):
 		print("ye")
 		get_tree().reload_current_scene()
+
+func die() -> void:
+	get_tree().reload_current_scene()
