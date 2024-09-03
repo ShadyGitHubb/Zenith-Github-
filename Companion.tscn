@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://dlt8melgjnn8r"]
+[gd_scene load_steps=31 format=3 uid="uid://dlt8melgjnn8r"]
 
 [ext_resource type="Script" path="res://Ginger.gd" id="1_nuwgy"]
 [ext_resource type="Texture2D" uid="uid://bqal2lmyye2pp" path="res://Cat-Sheet.png" id="2_3o0q5"]
@@ -193,6 +193,15 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_mc7vs"]
 radius = 37.0135
 
+[sub_resource type="Gradient" id="Gradient_ubsf0"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_85hat"]
+gradient = SubResource("Gradient_ubsf0")
+fill = 1
+fill_from = Vector2(0.518293, 0.5)
+fill_to = Vector2(0.329268, 0.640244)
+
 [node name="CharacterBody2D" type="CharacterBody2D"]
 collision_layer = 2
 script = ExtResource("1_nuwgy")
@@ -211,6 +220,11 @@ collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
 shape = SubResource("CircleShape2D_mc7vs")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(-1.19209e-07, 0)
+scale = Vector2(0.78125, 1)
+texture = SubResource("GradientTexture2D_85hat")
 
 [connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]

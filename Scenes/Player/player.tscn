@@ -99,6 +99,9 @@ animations = [{
 "texture": SubResource("AtlasTexture_8aelh")
 }, {
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_lkwjl")
+}, {
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_mjywu")
 }],
 "loop": true,
@@ -112,11 +115,11 @@ size = Vector2(17, 27)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i7rvi"]
 size = Vector2(17, 27)
 
-[sub_resource type="Gradient" id="Gradient_ubsf0"]
+[sub_resource type="Gradient" id="Gradient_bjlow"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_ppu4f"]
-gradient = SubResource("Gradient_ubsf0")
+gradient = SubResource("Gradient_bjlow")
 fill = 1
 fill_from = Vector2(0.518293, 0.5)
 fill_to = Vector2(0.121951, 0.878049)
@@ -129,8 +132,8 @@ script = ExtResource("1_c7uqj")
 position = Vector2(-2, 1)
 scale = Vector2(0.96875, 0.96875)
 sprite_frames = SubResource("SpriteFrames_clk7i")
-animation = &"Jump"
-frame_progress = 0.823576
+animation = &"Walk"
+frame_progress = 0.476784
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_4plnv")
@@ -149,5 +152,5 @@ position = Vector2(5.96046e-08, -5.68434e-14)
 scale = Vector2(1.48438, 1.375)
 texture = SubResource("GradientTexture2D_ppu4f")
 
-[connection signal="area_entered" from="RoomDetector" to="." method="_on_room_detector_area_entered"]
 [connection signal="area_entered" from="RoomDetector" to="." method="_on_RoomDetector_area_entered"]
+[connection signal="area_entered" from="RoomDetector" to="." method="_on_room_detector_area_entered"]
