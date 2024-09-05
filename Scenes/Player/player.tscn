@@ -110,10 +110,10 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4plnv"]
-size = Vector2(17, 27)
+size = Vector2(15.5, 27)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i7rvi"]
-size = Vector2(17, 27)
+size = Vector2(15.5, 27)
 
 [sub_resource type="Gradient" id="Gradient_bjlow"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -136,12 +136,14 @@ animation = &"Walk"
 frame_progress = 0.476784
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.75, 0)
 shape = SubResource("RectangleShape2D_4plnv")
 
 [node name="RoomDetector" type="Area2D" parent="."]
 collision_mask = 128
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoomDetector"]
+position = Vector2(-0.75, 0)
 shape = SubResource("RectangleShape2D_i7rvi")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
