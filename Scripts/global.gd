@@ -1,5 +1,6 @@
 extends Node
 
+var player_current_attack = false
 var camera_change = false
 var camera_target
 var current_area

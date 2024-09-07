@@ -1,10 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://c7267jediyinj"]
+[gd_scene load_steps=6 format=3 uid="uid://c7267jediyinj"]
 
 [ext_resource type="Script" path="res://Scripts/spike.gd" id="1_0or0b"]
 [ext_resource type="Texture2D" uid="uid://cg0axs7y6jhne" path="res://Sprites/Ground/Spikes.png" id="1_boqko"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3ds3t"]
 size = Vector2(16, 13)
+
+[sub_resource type="Gradient" id="Gradient_utgbv"]
+offsets = PackedFloat32Array(0, 0.19, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_vrrd2"]
+gradient = SubResource("Gradient_utgbv")
+fill = 1
+fill_from = Vector2(0.5, 0.512195)
+fill_to = Vector2(0.5, 0.420732)
 
 [node name="spike" type="Area2D"]
 collision_layer = 8
@@ -20,5 +30,9 @@ region_rect = Rect2(-0.0743847, 0.11472, 15.7764, 15.8853)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -6.5)
 shape = SubResource("RectangleShape2D_3ds3t")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(0, -7)
+texture = SubResource("GradientTexture2D_vrrd2")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
