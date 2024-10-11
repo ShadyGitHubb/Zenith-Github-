@@ -79,7 +79,7 @@ radius = 34.6731
 radius = 3.7006
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rb2hd"]
-radius = 10.7497
+radius = 6.66667
 
 [node name="Enemy" type="CharacterBody2D"]
 position = Vector2(-1, -10)
@@ -96,6 +96,7 @@ frame_progress = 0.0172365
 offset = Vector2(0, -8)
 
 [node name="detection_area" type="Area2D" parent="."]
+visible = false
 collision_layer = 2
 collision_mask = 2
 
@@ -110,7 +111,7 @@ shape = SubResource("CircleShape2D_c4fki")
 [node name="enemy_hitbox" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="enemy_hitbox"]
-position = Vector2(0, -2.66667)
+position = Vector2(0, -2)
 shape = SubResource("CircleShape2D_rb2hd")
 
 [node name="take_damage_cooldown" type="Timer" parent="."]

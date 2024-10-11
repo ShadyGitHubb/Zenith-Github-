@@ -273,6 +273,10 @@ collision_layer = 4
 collision_mask = 4
 script = ExtResource("1_1uods")
 
+[node name="SoulLinkTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(1, 2)
 sprite_frames = SubResource("SpriteFrames_5nlwg")
@@ -304,5 +308,6 @@ texture = SubResource("GradientTexture2D_85hat")
 position = Vector2(3, 13)
 target_position = Vector2(0, 17)
 
+[connection signal="timeout" from="SoulLinkTimer" to="." method="_on_soul_link_timer_timeout"]
 [connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]

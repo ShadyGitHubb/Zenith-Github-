@@ -1,16 +1,15 @@
 extends CharacterBody2D
 
 class_name Player
- 
+
 var enemy_inattack_range = false
 var enemy_attack_cooldown = true
 var health = 160
 var player_alive = true
 var attack_ip = false
-
 var speed = 70.0
-var gravity = 9.8
-var jump = -200
+var gravity = 980.0  # Increase gravity for more realistic feel
+var jump = -300  # Adjust jump force if needed
 var jump_count = 1
 var max_jumps = 2
 var pressed = 2
@@ -19,6 +18,15 @@ signal died
 
 @onready var current_area = get_node("/root/MainScene1")
 @onready var global = get_node("/root/Global")
+@onready var soul_link_timer = $SoulLinkTimer  # Ensure Timer node is correctly referenced
+
+func _ready():
+	soul_link_timer = $SoulLinkTimer
+	if soul_link_timer:
+		soul_link_timer.connect("timeout", Callable(self, "_on_soul_link_timeout"))
+		print("SoulLinkTimer connected successfully.")
+	else:
+		print("SoulLinkTimer node not found. Check node name and placement.")
 
 func _physics_process(delta):
 	Move(delta)
@@ -33,79 +41,64 @@ func _physics_process(delta):
 		self.queue_free()
 	
 	if not is_on_floor():
-		velocity.y += gravity
+		velocity.y += gravity * delta
 		
 	move_and_slide()
-	
+
 func Move(delta):
 	var direction = Input.get_axis("ui_right", "ui_left")
 	if direction:
-		velocity.x = lerp(velocity.x, speed * -direction, 0.1)
+		velocity.x = lerp(velocity.x, speed * direction, 0.1)
 		if Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_right"):
-			$AnimatedSprite2D.play("Walk")
-		$AnimatedSprite2D.scale.x = -direction
+			play_animation("Walk")
+		$AnimatedSprite2D.scale.x = direction  # Fix the control inversion by setting scale to direction
 
 	elif not is_on_floor():
 		velocity.x = lerp(velocity.x, 0.0, 0.01)
 	else:
 		velocity.x = lerp(velocity.x, 0.0, 0.1)
 
-	if direction > 0:
-		$AnimatedSprite2D
+	if direction == 0:
+		play_animation("Idle")
 
-	if not Input.is_anything_pressed():
-		if attack_ip == false:
-			$AnimatedSprite2D.play("Idle")
+	if not Input.is_anything_pressed() and not attack_ip:
+		play_animation("Idle")
 	
 	if Input.is_action_just_pressed("ui_jump"):
 		pressed -= 1
-		print(pressed)
-		
-	if Input.is_action_just_pressed("ui_jump") and max_jumps > jump_count:
-		velocity.y = jump
-		$AnimatedSprite2D.play("Jump")
-		jump_count = jump_count + 1
+		if pressed >= 0 and jump_count < max_jumps:
+			velocity.y = jump
+			play_animation("Jump")
+			jump_count += 1
 
 	if is_on_floor():
 		jump_count = 1
+		pressed = max_jumps
 
-	if !is_on_floor():
-		$AnimatedSprite2D.play("Jump")
-		
-	if !is_on_floor() && velocity.y > 10:
-		$AnimatedSprite2D.play("Fall")
-	
-		
+	if not is_on_floor() and velocity.y > 10:
+		play_animation("Fall")
+	elif not is_on_floor():
+		play_animation("Jump")
 
 func _on_spawn(position: Vector2, direction: String):
 	global_position = position
-	$AnimatedSprite2D.play("Walk" + direction)
+	play_animation("Walk" + direction)
 	$AnimatedSprite2D.stop()
 
 func _on_RoomDetector_area_entered(area: Area2D) -> void:
-	print("1", global.current_area)
-	print("2", area)
-	# Gets collision shape and size of room
-	#var collision_shape: CollisionShape2D = area.get_node("CollisionShape2D")
-	#var size: Vector2 = collision_shape.shape.extents * 2
 	if area != global.current_area and area.is_in_group("rooms"):
 		global.current_area = area
-		print("3", global.current_area)
-		print(area)
 		global.camera_target = area
 		await get_tree().create_timer(0.1).timeout
 		global.camera_change = true
- 	
-	# Changes camera's current room and size. check camera script for more info
 
 func _on_room_detector_area_entered(area):
 	if area.has_meta("Death"):
 		get_tree().reload_current_scene()
 
 func die() -> void:
+	emit_signal("died")
 	get_tree().change_scene_to_file("res://UI/game_over_screen.tscn")
-
-
 
 func player():
 	pass
@@ -120,7 +113,7 @@ func _on_player_hitbox_body_exited(body):
 
 func enemy_attack():
 	if enemy_inattack_range and enemy_attack_cooldown == true:
-		health = health - 20
+		health -= 20
 		enemy_attack_cooldown = false
 		$attack_cooldown.start()
 		print(health)
@@ -136,16 +129,22 @@ func attack():
 		attack_ip = true
 		
 	if Input.is_action_pressed("ui_left"):
-		$AnimatedSprite2D.scale.x = -direction
-		$AnimatedSprite2D.play("attack")
+		play_animation("attack")
 		$deal_attack_timer.start()
 	elif Input.is_action_pressed("ui_right"):
-		$AnimatedSprite2D.scale.x = -direction
-		$AnimatedSprite2D.play("attack")
+		play_animation("attack")
 		$deal_attack_timer.start()
 
 func _on_deal_attack_timer_timeout():
 	$deal_attack_timer.stop()
 	global.player_current_attack = false
 	attack_ip = false
-	
+
+# Handle player soul link timeout
+func _on_soul_link_timeout():
+	die()
+
+# Function to handle animation transitions
+func play_animation(animation_name):
+	if not $AnimatedSprite2D.is_playing() or $AnimatedSprite2D.animation != animation_name:
+		$AnimatedSprite2D.play(animation_name)
