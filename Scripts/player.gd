@@ -19,6 +19,7 @@ signal died
 @onready var current_area = get_node("/root/MainScene1")
 @onready var global = get_node("/root/Global")
 @onready var soul_link_timer = $SoulLinkTimer  # Ensure Timer node is correctly referenced
+@onready var animated_sprite = $AnimatedSprite2D  # Reference the AnimatedSprite2D node
 
 func _ready():
 	soul_link_timer = $SoulLinkTimer
@@ -27,6 +28,7 @@ func _ready():
 		print("SoulLinkTimer connected successfully.")
 	else:
 		print("SoulLinkTimer node not found. Check node name and placement.")
+	print("Player script ready.")
 
 func _physics_process(delta):
 	Move(delta)
@@ -46,19 +48,20 @@ func _physics_process(delta):
 	move_and_slide()
 
 func Move(delta):
-	var direction = Input.get_axis("ui_right", "ui_left")
+	var direction = Input.get_axis("ui_left", "ui_right")  # Fixing inverted controls
 	if direction:
 		velocity.x = lerp(velocity.x, speed * direction, 0.1)
 		if Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_right"):
-			play_animation("Walk")
-		$AnimatedSprite2D.scale.x = direction  # Fix the control inversion by setting scale to direction
+			if not attack_ip:  # Prevent walk animation from playing during attack
+				play_animation("Walk")
+		animated_sprite.scale.x = direction  # Fix the control inversion by setting scale to direction
 
 	elif not is_on_floor():
 		velocity.x = lerp(velocity.x, 0.0, 0.01)
 	else:
 		velocity.x = lerp(velocity.x, 0.0, 0.1)
 
-	if direction == 0:
+	if direction == 0 and not attack_ip:  # Prevent idle animation during attack
 		play_animation("Idle")
 
 	if not Input.is_anything_pressed() and not attack_ip:
@@ -83,7 +86,7 @@ func Move(delta):
 func _on_spawn(position: Vector2, direction: String):
 	global_position = position
 	play_animation("Walk" + direction)
-	$AnimatedSprite2D.stop()
+	animated_sprite.stop()
 
 func _on_RoomDetector_area_entered(area: Area2D) -> void:
 	if area != global.current_area and area.is_in_group("rooms"):
@@ -122,18 +125,18 @@ func _on_attack_cooldown_timeout():
 	enemy_attack_cooldown = true
 
 func attack():
-	var direction = Input.get_axis("ui_right", "ui_left")
+	var direction = Input.get_axis("ui_left", "ui_right")
 
 	if Input.is_action_just_pressed("attack"):
 		global.player_current_attack = true
 		attack_ip = true
-		
-	if Input.is_action_pressed("ui_left"):
-		play_animation("attack")
+		play_animation("Attack")  # Trigger attack animation only when attacking
 		$deal_attack_timer.start()
-	elif Input.is_action_pressed("ui_right"):
-		play_animation("attack")
-		$deal_attack_timer.start()
+	
+	if Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_right"):
+		if not attack_ip:  # Prevent walk animation from playing during attack
+			play_animation("Walk")
+		animated_sprite.scale.x = direction  # Fix the control inversion by setting scale to direction
 
 func _on_deal_attack_timer_timeout():
 	$deal_attack_timer.stop()
@@ -146,5 +149,6 @@ func _on_soul_link_timeout():
 
 # Function to handle animation transitions
 func play_animation(animation_name):
-	if not $AnimatedSprite2D.is_playing() or $AnimatedSprite2D.animation != animation_name:
-		$AnimatedSprite2D.play(animation_name)
+	if not animated_sprite.is_playing() or animated_sprite.animation != animation_name:
+		animated_sprite.play(animation_name)
+		print("Playing animation: ", animation_name)
