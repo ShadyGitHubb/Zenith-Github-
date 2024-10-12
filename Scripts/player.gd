@@ -1,5 +1,4 @@
 extends CharacterBody2D
-
 class_name Player
 
 var enemy_inattack_range = false
@@ -13,13 +12,15 @@ var jump = -300  # Adjust jump force if needed
 var jump_count = 1
 var max_jumps = 2
 var pressed = 2
+var heart_following = null  # Reference to the following heart
+var heart_scene = preload("res://Scenes/heart.tscn") as PackedScene  # Preload heart scene here
 
 signal died
 
 @onready var current_area = get_node("/root/MainScene1")
 @onready var global = get_node("/root/Global")
 @onready var soul_link_timer = $SoulLinkTimer  # Ensure Timer node is correctly referenced
-@onready var animated_sprite = $AnimatedSprite2D  # Reference the AnimatedSprite2D node
+@onready var animated_sprite = $AnimatedSprite2D  # Reference to the AnimatedSprite2D node
 
 func _ready():
 	soul_link_timer = $SoulLinkTimer
@@ -34,18 +35,29 @@ func _physics_process(delta):
 	Move(delta)
 	enemy_attack()
 	attack()
-	
 	if health <= 0:
 		player_alive = false
 		get_tree().change_scene_to_file("res://UI/game_over_screen.tscn")
 		health = 0
 		print("player has been killed")
 		self.queue_free()
-	
+		if heart_following:
+			heart_following.queue_free()
+			heart_following = null
 	if not is_on_floor():
 		velocity.y += gravity * delta
-		
 	move_and_slide()
+
+func _on_Heart_collected():
+	if heart_following == null:
+		heart_following = heart_scene.instantiate()
+		add_child(heart_following)
+		heart_following.connect("heart_collected", Callable(self, "_on_Heart_collected"))
+	health += 20  # or increase player's lives
+	print("Life increased! Total health: ", health)
+
+# Keep the rest of your existing functions intact
+
 
 func Move(delta):
 	var direction = Input.get_axis("ui_left", "ui_right")  # Fixing inverted controls

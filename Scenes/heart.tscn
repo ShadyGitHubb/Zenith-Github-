@@ -1,0 +1,44 @@
+[gd_scene load_steps=7 format=3 uid="uid://vjqqirbvpvrs"]
+
+[ext_resource type="Script" path="res://Scripts/heart.gd" id="1_kh3dj"]
+[ext_resource type="Texture2D" uid="uid://doy57d7xwarj7" path="res://pixil-frame-0 (8) (1).png" id="2_2ug5w"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gvcsc"]
+atlas = ExtResource("2_2ug5w")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ffm24"]
+atlas = ExtResource("2_2ug5w")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qqeht"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gvcsc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ffm24")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_55fxe"]
+radius = 6.0
+
+[node name="Area2D" type="Area2D"]
+script = ExtResource("1_kh3dj")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_qqeht")
+animation = &"Idle"
+frame_progress = 0.700293
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_55fxe")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_Heart_body_entered"]
