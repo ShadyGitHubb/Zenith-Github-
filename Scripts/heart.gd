@@ -4,7 +4,7 @@ signal heart_collected
 
 var player = null  # Reference to the player
 var speed = 100  # Adjust the speed as needed
-var offset = Vector2(10, 0)  # Offset from player's center
+var offset = Vector2(-20, 0)  # Offset from player's center
 var follow_delay = 0.5  # Delay before following
 
 @onready var animated_sprite = $AnimatedSprite2D  # Reference to the AnimatedSprite2D node

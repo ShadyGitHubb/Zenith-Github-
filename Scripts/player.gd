@@ -3,7 +3,7 @@ class_name Player
 
 var enemy_inattack_range = false
 var enemy_attack_cooldown = true
-var health = 160
+var health = 140
 var player_alive = true
 var attack_ip = false
 var speed = 70.0
@@ -12,6 +12,10 @@ var jump = -300  # Adjust jump force if needed
 var jump_count = 1
 var max_jumps = 2
 var pressed = 2
+var dash_speed = 300.0
+var dash_duration = 0.2
+var dash_cooldown = 0.5
+var can_dash = true
 var heart_following = null  # Reference to the following heart
 var heart_scene = preload("res://Scenes/heart.tscn") as PackedScene  # Preload heart scene here
 
@@ -47,8 +51,20 @@ func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y += gravity * delta
 	move_and_slide()
+	Dash(delta)  # Add Dash function call here
 
-func _on_Heart_collected():
+func Dash(delta):
+	if Input.is_action_just_pressed("dash") and can_dash:
+		var direction = Input.get_axis("ui_left", "ui_right")
+		if direction != 0:
+			velocity.x = direction * dash_speed
+			can_dash = false
+			await get_tree().create_timer(dash_duration).timeout
+			velocity.x = 0
+			await get_tree().create_timer(dash_cooldown).timeout
+			can_dash = true
+
+func _on_heart_collected():
 	if heart_following == null:
 		heart_following = heart_scene.instantiate()
 		add_child(heart_following)
@@ -66,6 +82,7 @@ func Move(delta):
 		if Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_right"):
 			if not attack_ip:  # Prevent walk animation from playing during attack
 				play_animation("Walk")
+		print(direction)
 		animated_sprite.scale.x = direction  # Fix the control inversion by setting scale to direction
 
 	elif not is_on_floor():
@@ -148,7 +165,6 @@ func attack():
 	if Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_right"):
 		if not attack_ip:  # Prevent walk animation from playing during attack
 			play_animation("Walk")
-		animated_sprite.scale.x = direction  # Fix the control inversion by setting scale to direction
 
 func _on_deal_attack_timer_timeout():
 	$deal_attack_timer.stop()
@@ -164,3 +180,7 @@ func play_animation(animation_name):
 	if not animated_sprite.is_playing() or animated_sprite.animation != animation_name:
 		animated_sprite.play(animation_name)
 		print("Playing animation: ", animation_name)
+
+
+func _on_heart_heart_collected():
+	pass # Replace with function body.
