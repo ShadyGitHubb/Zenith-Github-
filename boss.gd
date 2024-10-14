@@ -7,20 +7,23 @@ var gravity = 9.8
 var health = 100
 var player_inattack_zone = false
 var can_take_damage = true
+var direction = 0  # Initialize direction
 
 @onready var global = get_node("/root/Global")
 
 func _physics_process(delta):
 	deal_with_damage()
-	if player_chase:
+	if player_chase and player != null:
 		position += (player.position - position) / speed
 	else:
+		velocity.x = lerp(velocity.x, float(direction * speed * 5), 0.5)
 		$AnimatedSprite2D.play("Hovering")
-		if (player.position.x - position.x) < 0:
-			$AnimatedSprite2D.flip_h = false
-		else:
-			$AnimatedSprite2D.flip_h = true
-		$AnimatedSprite2D.play("Idle")
+		if player != null:
+			if (player.position.x - position.x) < 0:
+				$AnimatedSprite2D.flip_h = false
+			else:
+				$AnimatedSprite2D.flip_h = true
+	$AnimatedSprite2D.play("Idle")
 
 func _on_detection_area_body_entered(body):
 	player = body

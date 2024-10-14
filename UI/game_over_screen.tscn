@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://nyk0ss2yu0a1"]
+[gd_scene load_steps=4 format=3 uid="uid://nyk0ss2yu0a1"]
 
 [ext_resource type="Script" path="res://Scripts/game_over_screen.gd" id="1_ct05l"]
+[ext_resource type="Theme" uid="uid://c0t7qmyni4hut" path="res://UI/game_over_screen.tres" id="2_dr3ed"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_y3me1"]
 font_size = 48
@@ -33,6 +34,7 @@ horizontal_alignment = 1
 [node name="Button" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme = ExtResource("2_dr3ed")
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 32

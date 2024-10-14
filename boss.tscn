@@ -1,38 +1,38 @@
-[gd_scene load_steps=15 format=3 uid="uid://b1a2cuu2eknpl"]
+[gd_scene load_steps=15 format=3 uid="uid://c1dyy4hg2wwwf"]
 
-[ext_resource type="Script" path="res://Scripts/Phantom.gd" id="1_sh1lp"]
-[ext_resource type="Texture2D" uid="uid://d3umoat778n76" path="res://Sprites/Ground/Phantom animation.png" id="2_1ctua"]
+[ext_resource type="Script" path="res://boss.gd" id="1_s8b6v"]
+[ext_resource type="Texture2D" uid="uid://d3umoat778n76" path="res://Sprites/Ground/Phantom animation.png" id="2_tlps1"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_b3q83"]
-atlas = ExtResource("2_1ctua")
+atlas = ExtResource("2_tlps1")
 region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_glvdc"]
-atlas = ExtResource("2_1ctua")
+atlas = ExtResource("2_tlps1")
 region = Rect2(64, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qxoxs"]
-atlas = ExtResource("2_1ctua")
+atlas = ExtResource("2_tlps1")
 region = Rect2(128, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jrvy8"]
-atlas = ExtResource("2_1ctua")
+atlas = ExtResource("2_tlps1")
 region = Rect2(192, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a6p5a"]
-atlas = ExtResource("2_1ctua")
+atlas = ExtResource("2_tlps1")
 region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_137c8"]
-atlas = ExtResource("2_1ctua")
+atlas = ExtResource("2_tlps1")
 region = Rect2(64, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8hjjn"]
-atlas = ExtResource("2_1ctua")
+atlas = ExtResource("2_tlps1")
 region = Rect2(128, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ho5bb"]
-atlas = ExtResource("2_1ctua")
+atlas = ExtResource("2_tlps1")
 region = Rect2(192, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_mixe6"]
@@ -73,7 +73,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_p7w6d"]
-radius = 50.4007
+radius = 106.848
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c4fki"]
 radius = 3.7006
@@ -81,26 +81,26 @@ radius = 3.7006
 [sub_resource type="CircleShape2D" id="CircleShape2D_rb2hd"]
 radius = 6.66667
 
-[node name="Enemy" type="CharacterBody2D"]
-position = Vector2(-1, -10)
-scale = Vector2(1.5, 1.5)
+[node name="BOSS" type="CharacterBody2D"]
+position = Vector2(-1, -8)
+scale = Vector2(2.5, 2.5)
 collision_layer = 3
-script = ExtResource("1_sh1lp")
+script = ExtResource("1_s8b6v")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(5.96046e-08, 2.66667)
 scale = Vector2(0.653333, 0.68)
 sprite_frames = SubResource("SpriteFrames_mixe6")
-animation = &"Hovering"
+animation = &"Idle"
+frame_progress = 0.0172365
 offset = Vector2(0, -8)
 
 [node name="detection_area" type="Area2D" parent="."]
-visible = false
 collision_layer = 2
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="detection_area"]
-position = Vector2(0, -5.33333)
+position = Vector2(0, -4.76837e-07)
 shape = SubResource("CircleShape2D_p7w6d")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -110,7 +110,7 @@ shape = SubResource("CircleShape2D_c4fki")
 [node name="enemy_hitbox" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="enemy_hitbox"]
-position = Vector2(0, -2)
+position = Vector2(0.8, 0.8)
 shape = SubResource("CircleShape2D_rb2hd")
 
 [node name="take_damage_cooldown" type="Timer" parent="."]

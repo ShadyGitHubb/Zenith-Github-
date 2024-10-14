@@ -7,8 +7,8 @@ var health = 140
 var player_alive = true
 var attack_ip = false
 var speed = 70.0
-var gravity = 980.0  # Increase gravity for more realistic feel
-var jump = -300  # Adjust jump force if needed
+var gravity = 980.0
+var jump = -300
 var jump_count = 1
 var max_jumps = 2
 var pressed = 2
@@ -16,15 +16,16 @@ var dash_speed = 300.0
 var dash_duration = 0.2
 var dash_cooldown = 0.5
 var can_dash = true
-var heart_following = null  # Reference to the following heart
-var heart_scene = preload("res://Scenes/heart.tscn") as PackedScene  # Preload heart scene here
+var heart_following = null
+var heart_scene = preload("res://Scenes/heart.tscn") as PackedScene
+const wall_jump_pushback = 100
 
 signal died
 
 @onready var current_area = get_node("/root/MainScene1")
 @onready var global = get_node("/root/Global")
-@onready var soul_link_timer = $SoulLinkTimer  # Ensure Timer node is correctly referenced
-@onready var animated_sprite = $AnimatedSprite2D  # Reference to the AnimatedSprite2D node
+@onready var soul_link_timer = $SoulLinkTimer
+@onready var animated_sprite = $AnimatedSprite2D
 
 func _ready():
 	soul_link_timer = $SoulLinkTimer
@@ -36,81 +37,87 @@ func _ready():
 	print("Player script ready.")
 
 func _physics_process(delta):
-	Move(delta)
-	enemy_attack()
-	attack()
 	if health <= 0:
 		player_alive = false
 		get_tree().change_scene_to_file("res://UI/game_over_screen.tscn")
 		health = 0
 		print("player has been killed")
 		self.queue_free()
-		if heart_following:
-			heart_following.queue_free()
-			heart_following = null
-	if not is_on_floor():
-		velocity.y += gravity * delta
+	if heart_following:
+		heart_following.queue_free()
+		heart_following = null
+	
+	handle_movement(delta)
+	wall_jump()
+	
+	# Apply gravity
+	velocity.y += gravity * delta
+
+	if Input.is_action_just_pressed("dash") and can_dash:
+		Dash(delta)
+	
+	enemy_attack()
+	attack()
+
+	# Move player
 	move_and_slide()
-	Dash(delta)  # Add Dash function call here
+
 
 func Dash(delta):
-	if Input.is_action_just_pressed("dash") and can_dash:
-		var direction = Input.get_axis("ui_left", "ui_right")
-		if direction != 0:
-			velocity.x = direction * dash_speed
-			can_dash = false
-			await get_tree().create_timer(dash_duration).timeout
-			velocity.x = 0
-			await get_tree().create_timer(dash_cooldown).timeout
-			can_dash = true
+	var direction = Input.get_axis("ui_left", "ui_right")
+	if direction != 0:
+		velocity.x = direction * dash_speed
+	can_dash = false
+	await get_tree().create_timer(dash_duration).timeout
+	velocity.x = 0
+	await get_tree().create_timer(dash_cooldown).timeout
+	can_dash = true
 
-func _on_heart_collected():
-	if heart_following == null:
-		heart_following = heart_scene.instantiate()
-		add_child(heart_following)
-		heart_following.connect("heart_collected", Callable(self, "_on_Heart_collected"))
-	health += 20  # or increase player's lives
-	print("Life increased! Total health: ", health)
+func wall_jump():
+	if is_on_wall():
+		if Input.is_action_pressed("ui_jump"):
+			if Input.is_action_pressed("ui_right"):
+				velocity.y = jump
+				velocity.x = -wall_jump_pushback
+			elif Input.is_action_pressed("ui_left"):
+				velocity.y = jump
+				velocity.x = wall_jump_pushback
 
-# Keep the rest of your existing functions intact
-
-
-func Move(delta):
-	var direction = Input.get_axis("ui_left", "ui_right")  # Fixing inverted controls
-	if direction:
-		velocity.x = lerp(velocity.x, speed * direction, 0.1)
-		if Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_right"):
-			if not attack_ip:  # Prevent walk animation from playing during attack
-				play_animation("Walk")
-		print(direction)
-		animated_sprite.scale.x = direction  # Fix the control inversion by setting scale to direction
-
-	elif not is_on_floor():
-		velocity.x = lerp(velocity.x, 0.0, 0.01)
-	else:
-		velocity.x = lerp(velocity.x, 0.0, 0.1)
-
-	if direction == 0 and not attack_ip:  # Prevent idle animation during attack
-		play_animation("Idle")
-
-	if not Input.is_anything_pressed() and not attack_ip:
-		play_animation("Idle")
-	
-	if Input.is_action_just_pressed("ui_jump"):
-		pressed -= 1
-		if pressed >= 0 and jump_count < max_jumps:
-			velocity.y = jump
+func handle_movement(delta):
+	var direction = Input.get_axis("ui_left", "ui_right")
+	if direction != 0:
+		velocity.x = direction * speed
+		animated_sprite.scale.x = abs(animated_sprite.scale.x) * direction
+		if is_on_floor():
+			play_animation("Walk")
+		else:
 			play_animation("Jump")
-			jump_count += 1
+	else:
+		if is_on_floor():
+			play_animation("Idle")
+		velocity.x = 0
 
 	if is_on_floor():
-		jump_count = 1
-		pressed = max_jumps
+		jump_count = 0
+		if Input.is_action_just_pressed("ui_jump"):
+			velocity.y = jump
+			jump_count += 1
+	elif jump_count < max_jumps and Input.is_action_just_pressed("ui_jump"):
+		velocity.y = jump
+		jump_count += 1
 
 	if not is_on_floor() and velocity.y > 10:
 		play_animation("Fall")
 	elif not is_on_floor():
 		play_animation("Jump")
+
+func _on_Heart_collected():
+	if heart_following == null:
+		heart_following = heart_scene.instantiate()
+		add_child(heart_following)
+		heart_following.connect("heart_collected", Callable(self, "_on_Heart_collected"))
+		health += 20
+		print("Life increased! Total health: ", health)
 
 func _on_spawn(position: Vector2, direction: String):
 	global_position = position
@@ -155,15 +162,14 @@ func _on_attack_cooldown_timeout():
 
 func attack():
 	var direction = Input.get_axis("ui_left", "ui_right")
-
 	if Input.is_action_just_pressed("attack"):
 		global.player_current_attack = true
 		attack_ip = true
-		play_animation("Attack")  # Trigger attack animation only when attacking
+		play_animation("Attack")
 		$deal_attack_timer.start()
-	
+		print("Attack started")
 	if Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_right"):
-		if not attack_ip:  # Prevent walk animation from playing during attack
+		if not attack_ip:
 			play_animation("Walk")
 
 func _on_deal_attack_timer_timeout():
@@ -171,16 +177,13 @@ func _on_deal_attack_timer_timeout():
 	global.player_current_attack = false
 	attack_ip = false
 
-# Handle player soul link timeout
 func _on_soul_link_timeout():
 	die()
 
-# Function to handle animation transitions
 func play_animation(animation_name):
 	if not animated_sprite.is_playing() or animated_sprite.animation != animation_name:
 		animated_sprite.play(animation_name)
 		print("Playing animation: ", animation_name)
 
-
 func _on_heart_heart_collected():
-	pass # Replace with function body.
+	pass
