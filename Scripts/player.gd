@@ -12,7 +12,7 @@ var jump = -300
 var jump_count = 1
 var max_jumps = 2
 var pressed = 2
-var dash_speed = 300.0
+var dash_speed = 900.0
 var dash_duration = 0.2
 var dash_cooldown = 0.5
 var can_dash = true
@@ -43,35 +43,30 @@ func _physics_process(delta):
 		health = 0
 		print("player has been killed")
 		self.queue_free()
-	if heart_following:
-		heart_following.queue_free()
-		heart_following = null
+		if heart_following:
+			heart_following.queue_free()
+			heart_following = null
 	
 	handle_movement(delta)
 	wall_jump()
-	
 	# Apply gravity
 	velocity.y += gravity * delta
-
 	if Input.is_action_just_pressed("dash") and can_dash:
 		Dash(delta)
-	
 	enemy_attack()
 	attack()
-
 	# Move player
 	move_and_slide()
-
 
 func Dash(delta):
 	var direction = Input.get_axis("ui_left", "ui_right")
 	if direction != 0:
 		velocity.x = direction * dash_speed
-	can_dash = false
-	await get_tree().create_timer(dash_duration).timeout
-	velocity.x = 0
-	await get_tree().create_timer(dash_cooldown).timeout
-	can_dash = true
+		can_dash = false
+		await get_tree().create_timer(dash_duration).timeout
+		velocity.x = direction * speed  # Continue moving in the same direction
+		await get_tree().create_timer(dash_cooldown).timeout
+		can_dash = true
 
 func wall_jump():
 	if is_on_wall():
@@ -89,35 +84,41 @@ func handle_movement(delta):
 		velocity.x = direction * speed
 		animated_sprite.scale.x = abs(animated_sprite.scale.x) * direction
 		if is_on_floor():
-			play_animation("Walk")
+			if not attack_ip:
+				play_animation("Walk")
 		else:
-			play_animation("Jump")
+			if not attack_ip:
+				play_animation("Jump")
 	else:
 		if is_on_floor():
-			play_animation("Idle")
+			if not attack_ip:
+				play_animation("Idle")
 		velocity.x = 0
 
 	if is_on_floor():
 		jump_count = 0
-		if Input.is_action_just_pressed("ui_jump"):
-			velocity.y = jump
-			jump_count += 1
+
+	if Input.is_action_just_pressed("ui_jump"):
+		velocity.y = jump
+		jump_count += 1
 	elif jump_count < max_jumps and Input.is_action_just_pressed("ui_jump"):
 		velocity.y = jump
 		jump_count += 1
 
 	if not is_on_floor() and velocity.y > 10:
-		play_animation("Fall")
+		if not attack_ip:
+			play_animation("Fall")
 	elif not is_on_floor():
-		play_animation("Jump")
+		if not attack_ip:
+			play_animation("Jump")
 
 func _on_Heart_collected():
 	if heart_following == null:
 		heart_following = heart_scene.instantiate()
 		add_child(heart_following)
 		heart_following.connect("heart_collected", Callable(self, "_on_Heart_collected"))
-		health += 20
-		print("Life increased! Total health: ", health)
+	health += 20
+	print("Life increased! Total health: ", health)
 
 func _on_spawn(position: Vector2, direction: String):
 	global_position = position
@@ -161,7 +162,6 @@ func _on_attack_cooldown_timeout():
 	enemy_attack_cooldown = true
 
 func attack():
-	var direction = Input.get_axis("ui_left", "ui_right")
 	if Input.is_action_just_pressed("attack"):
 		global.player_current_attack = true
 		attack_ip = true

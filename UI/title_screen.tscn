@@ -1,8 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://cx72xxej8hnan"]
+[gd_scene load_steps=5 format=3 uid="uid://cx72xxej8hnan"]
 
 [ext_resource type="Script" path="res://TitleScreen.gd" id="1_tbmfk"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0k7mr"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xo2kf"]
+bg_color = Color(0.533333, 0.607843, 0.709804, 1)
+
 [sub_resource type="Theme" id="Theme_oe8c4"]
+Button/styles/hover = SubResource("StyleBoxFlat_0k7mr")
+Button/styles/normal = SubResource("StyleBoxFlat_xo2kf")
 
 [node name="TitleScreen" type="Control"]
 layout_mode = 3

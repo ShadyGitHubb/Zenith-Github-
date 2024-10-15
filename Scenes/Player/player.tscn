@@ -1,10 +1,13 @@
-[gd_scene load_steps=28 format=3 uid="uid://svi5642w7e1"]
+[gd_scene load_steps=29 format=3 uid="uid://svi5642w7e1"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_c7uqj"]
 [ext_resource type="Texture2D" uid="uid://kmuikxsjqp80" path="res://Sprites/spritesheet (4).png" id="2_24f35"]
 [ext_resource type="Texture2D" uid="uid://mc87khcjt665" path="res://spritesheet (8).png" id="3_4d46w"]
 [ext_resource type="Texture2D" uid="uid://bctlydmgni3vb" path="res://1.png" id="4_bora8"]
-[ext_resource type="Script" path="res://Scripts/ClimbDetector.gd" id="5_6pmgs"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gvm0q"]
+atlas = ExtResource("4_bora8")
+region = Rect2(0, 0, 29, 28)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1nyvw"]
 atlas = ExtResource("4_bora8")
@@ -21,6 +24,10 @@ region = Rect2(29, 28, 29, 28)
 [sub_resource type="AtlasTexture" id="AtlasTexture_qctra"]
 atlas = ExtResource("4_bora8")
 region = Rect2(0, 56, 29, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p8k7a"]
+atlas = ExtResource("4_bora8")
+region = Rect2(29, 56, 29, 28)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_x2gyh"]
 atlas = ExtResource("2_24f35")
@@ -74,6 +81,9 @@ region = Rect2(128, 32, 32, 32)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_gvm0q")
+}, {
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_1nyvw")
 }, {
 "duration": 1.0,
@@ -84,6 +94,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qctra")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p8k7a")
 }],
 "loop": true,
 "name": &"Attack",
@@ -171,18 +184,16 @@ position = Vector2(-2, 1)
 scale = Vector2(0.96875, 0.96875)
 sprite_frames = SubResource("SpriteFrames_clk7i")
 animation = &"Attack"
-frame = 3
-frame_progress = 0.361312
+frame_progress = 0.0737397
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.75, 0)
 shape = SubResource("RectangleShape2D_4plnv")
 
-[node name="ClimbDetector" type="Area2D" parent="."]
+[node name="RoomDetector" type="Area2D" parent="."]
 collision_mask = 128
-script = ExtResource("5_6pmgs")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ClimbDetector"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomDetector"]
 position = Vector2(-0.75, 0)
 shape = SubResource("RectangleShape2D_i7rvi")
 
@@ -195,9 +206,9 @@ scale = Vector2(1.48438, 1.375)
 texture = SubResource("GradientTexture2D_ppu4f")
 
 [node name="player_hitbox" type="Area2D" parent="."]
-metadata/player = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="player_hitbox"]
+position = Vector2(-1, 0)
 shape = SubResource("CircleShape2D_c5hhc")
 
 [node name="attack_cooldown" type="Timer" parent="."]
@@ -211,8 +222,8 @@ wait_time = 5.0
 one_shot = true
 
 [connection signal="died" from="." to="." method="_on_died"]
-[connection signal="area_entered" from="ClimbDetector" to="." method="_on_climb_detector_area_entered"]
-[connection signal="area_exited" from="ClimbDetector" to="." method="_on_climb_detector_area_exited"]
+[connection signal="area_entered" from="RoomDetector" to="." method="_on_room_detector_area_entered"]
+[connection signal="area_entered" from="RoomDetector" to="." method="_on_RoomDetector_area_entered"]
 [connection signal="body_entered" from="player_hitbox" to="." method="_on_player_hitbox_body_entered"]
 [connection signal="body_exited" from="player_hitbox" to="." method="_on_player_hitbox_body_exited"]
 [connection signal="timeout" from="attack_cooldown" to="." method="_on_attack_cooldown_timeout"]
