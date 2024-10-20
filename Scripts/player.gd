@@ -3,13 +3,13 @@ class_name Player
 
 var enemy_inattack_range = false
 var enemy_attack_cooldown = true
-var health = 140
+var health = 14000
 var player_alive = true
 var attack_ip = false
 var speed = 70.0
 var gravity = 980.0
 var jump = -300
-var jump_count = 1
+var jump_count = 0  # Start with zero jumps
 var max_jumps = 2
 var pressed = 2
 var dash_speed = 900.0
@@ -17,13 +17,14 @@ var dash_duration = 0.2
 var dash_cooldown = 0.5
 var can_dash = true
 var heart_following = null
+var saved_position = Vector2(-42,2)
+var saved_score = 0
 var heart_scene = preload("res://Scenes/heart.tscn") as PackedScene
 const wall_jump_pushback = 100
-
 signal died
 
 @onready var current_area = get_node("/root/MainScene1")
-@onready var global = get_node("/root/Global")
+@onready var global = Global  # Correct reference to autoloaded Global
 @onready var soul_link_timer = $SoulLinkTimer
 @onready var animated_sprite = $AnimatedSprite2D
 
@@ -32,9 +33,6 @@ func _ready():
 	if soul_link_timer:
 		soul_link_timer.connect("timeout", Callable(self, "_on_soul_link_timeout"))
 		print("SoulLinkTimer connected successfully.")
-	else:
-		print("SoulLinkTimer node not found. Check node name and placement.")
-	print("Player script ready.")
 
 func _physics_process(delta):
 	if health <= 0:
@@ -46,7 +44,7 @@ func _physics_process(delta):
 		if heart_following:
 			heart_following.queue_free()
 			heart_following = null
-	
+
 	handle_movement(delta)
 	wall_jump()
 	# Apply gravity
@@ -94,31 +92,17 @@ func handle_movement(delta):
 			if not attack_ip:
 				play_animation("Idle")
 		velocity.x = 0
-
 	if is_on_floor():
 		jump_count = 0
-
-	if Input.is_action_just_pressed("ui_jump"):
+	if Input.is_action_just_pressed("ui_jump") and jump_count < max_jumps:
 		velocity.y = jump
 		jump_count += 1
-	elif jump_count < max_jumps and Input.is_action_just_pressed("ui_jump"):
-		velocity.y = jump
-		jump_count += 1
-
 	if not is_on_floor() and velocity.y > 10:
 		if not attack_ip:
-			play_animation("Fall")
+			play_animation("Idle")
 	elif not is_on_floor():
 		if not attack_ip:
 			play_animation("Jump")
-
-func _on_Heart_collected():
-	if heart_following == null:
-		heart_following = heart_scene.instantiate()
-		add_child(heart_following)
-		heart_following.connect("heart_collected", Callable(self, "_on_Heart_collected"))
-	health += 20
-	print("Life increased! Total health: ", health)
 
 func _on_spawn(position: Vector2, direction: String):
 	global_position = position
@@ -183,7 +167,22 @@ func _on_soul_link_timeout():
 func play_animation(animation_name):
 	if not animated_sprite.is_playing() or animated_sprite.animation != animation_name:
 		animated_sprite.play(animation_name)
-		print("Playing animation: ", animation_name)
 
-func _on_heart_heart_collected():
-	pass
+func _on_coin_collected():
+	Global.add_coin()
+
+func _on_heart_collected():
+	if heart_following == null:
+		heart_following = heart_scene.instantiate()
+		add_child(heart_following)
+		heart_following.connect("heart_collected", Callable(self, "_on_Heart_collected"))
+	health += 20
+	print("Life increased! Total health: ", health)
+
+func save_state():
+	saved_position = global_position
+	saved_score = Global.score
+
+func load_state():
+	global_position = saved_position
+	Global.score = saved_score

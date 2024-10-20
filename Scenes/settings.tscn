@@ -1,0 +1,122 @@
+[gd_scene load_steps=8 format=3 uid="uid://ddx4ytltfsrx"]
+
+[ext_resource type="Script" path="res://Scripts/settings.gd" id="1_evwd1"]
+
+[sub_resource type="Theme" id="Theme_6a3c1"]
+Label/font_sizes/font_size = 36
+
+[sub_resource type="Theme" id="Theme_savgw"]
+Label/font_sizes/font_size = 25
+
+[sub_resource type="Theme" id="Theme_4rdej"]
+Label/font_sizes/font_size = 25
+
+[sub_resource type="Theme" id="Theme_rn2rn"]
+default_font_size = 0
+
+[sub_resource type="Theme" id="Theme_qj0s8"]
+Label/font_sizes/font_size = 36
+
+[sub_resource type="Theme" id="Theme_2f5kf"]
+Button/font_sizes/font_size = 45
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_evwd1")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Volume label" type="Label" parent="MarginContainer/VBoxContainer/Label"]
+layout_mode = 2
+offset_left = 23.0
+offset_top = 30.0
+offset_right = 1175.0
+offset_bottom = 80.0
+theme = SubResource("Theme_6a3c1")
+text = "Volume"
+
+[node name="- Volume label" type="Label" parent="MarginContainer/VBoxContainer/Label"]
+layout_mode = 2
+offset_left = 8.0
+offset_top = 83.0
+offset_right = 16.0
+offset_bottom = 118.0
+size_flags_horizontal = 0
+theme = SubResource("Theme_savgw")
+text = "-"
+
+[node name="+ Volume label" type="Label" parent="MarginContainer/VBoxContainer/Label"]
+layout_mode = 2
+offset_left = 1134.0
+offset_top = 80.0
+offset_right = 1148.0
+offset_bottom = 115.0
+size_flags_horizontal = 8
+theme = SubResource("Theme_4rdej")
+text = "+"
+
+[node name="Volume" type="HSlider" parent="MarginContainer/VBoxContainer/Label"]
+layout_mode = 2
+offset_left = 3.0
+offset_top = 113.0
+offset_right = 1155.0
+offset_bottom = 129.0
+size_flags_vertical = 2
+theme = SubResource("Theme_rn2rn")
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Display Options" type="Label" parent="MarginContainer/VBoxContainer/Label2"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 31.0
+offset_top = 220.5
+offset_right = 1183.0
+offset_bottom = 270.5
+grow_vertical = 2
+theme = SubResource("Theme_qj0s8")
+text = "Display Mode"
+
+[node name="DisplayModeOption" type="OptionButton" parent="MarginContainer/VBoxContainer/Label2"]
+layout_mode = 2
+offset_left = 1.0
+offset_top = 289.0
+offset_right = 1153.0
+offset_bottom = 320.0
+size_flags_vertical = 0
+item_count = 2
+popup/item_0/text = "Windowed"
+popup/item_0/id = 0
+popup/item_1/text = "Fullscreen"
+popup/item_1/id = 1
+
+[node name="ExitButton" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 10
+theme = SubResource("Theme_2f5kf")
+text = "Back"
+
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/Label/Volume" to="." method="_on_volume_value_changed"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/Label2/DisplayModeOption" to="." method="_on_display_mode_option_item_selected"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]

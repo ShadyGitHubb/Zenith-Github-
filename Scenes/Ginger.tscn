@@ -257,7 +257,7 @@ animations = [{
 size = Vector2(18, 22)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_mc7vs"]
-radius = 39.0128
+radius = 99.0051
 
 [sub_resource type="Gradient" id="Gradient_ubsf0"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -285,7 +285,7 @@ frame_progress = 0.79808
 
 [node name="RayCast2D" type="RayCast2D" parent="AnimatedSprite2D"]
 position = Vector2(7, 10)
-target_position = Vector2(14, 0)
+target_position = Vector2(11, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(1, 7)
@@ -306,7 +306,7 @@ texture = SubResource("GradientTexture2D_85hat")
 
 [node name="RayCast2D2" type="RayCast2D" parent="."]
 position = Vector2(3, 13)
-target_position = Vector2(0, 17)
+target_position = Vector2(0, 11)
 
 [connection signal="timeout" from="SoulLinkTimer" to="." method="_on_soul_link_timer_timeout"]
 [connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
