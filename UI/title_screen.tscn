@@ -1,60 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://cx72xxej8hnan"]
+[gd_scene load_steps=3 format=3 uid="uid://cx72xxej8hnan"]
 
 [ext_resource type="Script" path="res://TitleScreen.gd" id="1_tbmfk"]
-[ext_resource type="PackedScene" uid="uid://beq374is8w61h" path="res://Scenes/parallax.tscn" id="2_dj03h"]
-[ext_resource type="Texture2D" path="res://Scenes/logo.png" id="3_8y4fy"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hhhhl"]
-bg_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7svuf"]
-bg_color = Color(0.533333, 0.607843, 0.709804, 0)
 
 [sub_resource type="Theme" id="Theme_oe8c4"]
-Button/colors/font_color = Color(1, 1, 1, 1)
-Button/colors/font_hover_color = Color(1, 0.843137, 0, 1)
-Button/colors/font_hover_pressed_color = Color(0.901961, 0.760784, 0, 1)
-Button/font_sizes/font_size = 47
-Button/styles/hover = SubResource("StyleBoxFlat_hhhhl")
-Button/styles/normal = SubResource("StyleBoxFlat_7svuf")
-
-[sub_resource type="Animation" id="Animation_pqqve"]
-length = 10.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Logo:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(284, 164)]
-}
-
-[sub_resource type="Animation" id="Animation_8qqix"]
-resource_name = "bouncingtitle"
-length = 6.0
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Logo:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1, 2, 3, 4, 5),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(278, 168), Vector2(278, 155), Vector2(278, 140), Vector2(278, 130), Vector2(278, 140), Vector2(278, 155)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_u3x0x"]
-_data = {
-"RESET": SubResource("Animation_pqqve"),
-"bouncingtitle": SubResource("Animation_8qqix")
-}
 
 [node name="TitleScreen" type="Control"]
 layout_mode = 3
@@ -65,62 +13,24 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_tbmfk")
 
-[node name="Parallax" parent="." instance=ExtResource("2_dj03h")]
-
 [node name="StartButton" type="Button" parent="."]
 layout_mode = 0
-offset_left = 101.0
-offset_top = 250.0
-offset_right = 317.0
-offset_bottom = 331.0
+offset_left = 479.0
+offset_top = 228.0
+offset_right = 695.0
+offset_bottom = 309.0
 theme = SubResource("Theme_oe8c4")
 text = "Start"
 
-[node name="OptionsButton" type="Button" parent="."]
-layout_mode = 0
-offset_left = 106.0
-offset_top = 324.0
-offset_right = 322.0
-offset_bottom = 405.0
-theme = SubResource("Theme_oe8c4")
-text = "Options
-"
-
-[node name="CreditsButton" type="Button" parent="."]
-layout_mode = 0
-offset_left = 102.0
-offset_top = 388.0
-offset_right = 318.0
-offset_bottom = 469.0
-theme = SubResource("Theme_oe8c4")
-text = "Credits"
-
 [node name="QuitButton" type="Button" parent="."]
 layout_mode = 0
-offset_left = 107.0
-offset_top = 462.0
-offset_right = 323.0
-offset_bottom = 543.0
+offset_left = 481.0
+offset_top = 440.0
+offset_right = 697.0
+offset_bottom = 521.0
 theme = SubResource("Theme_oe8c4")
 text = "Quit
 "
 
-[node name="TextureRect" type="TextureRect" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Logo" type="Sprite2D" parent="."]
-position = Vector2(284, 164)
-scale = Vector2(0.640002, 0.640001)
-texture = ExtResource("3_8y4fy")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_u3x0x")
-}
-
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
-[connection signal="pressed" from="OptionsButton" to="." method="_on_options_button_pressed"]
-[connection signal="pressed" from="CreditsButton" to="." method="_on_credits_button_pressed"]
 [connection signal="pressed" from="QuitButton" to="." method="_on_quit_button_pressed"]
