@@ -1,0 +1,98 @@
+[gd_scene load_steps=9 format=3 uid="uid://hgbxqf53512u"]
+
+[ext_resource type="Script" path="res://Scripts/Key.gd" id="1_f18f0"]
+[ext_resource type="Texture2D" uid="uid://coq6cj38wafis" path="res://pixil-frame-0 (14).png" id="2_6qjpa"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_83vtl"]
+size = Vector2(9, 13.75)
+
+[sub_resource type="Gradient" id="Gradient_a6tps"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4qc6e"]
+gradient = SubResource("Gradient_a6tps")
+fill = 1
+fill_from = Vector2(0.493902, 0.512195)
+fill_to = Vector2(0.52439, 0.426829)
+
+[sub_resource type="Animation" id="Animation_2qjgf"]
+resource_name = "Hovering"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_6qjpa")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape2D:shape")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("RectangleShape2D_83vtl")]
+}
+
+[sub_resource type="Animation" id="Animation_0tem6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_6qjpa")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape2D:shape")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("RectangleShape2D_83vtl")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6bnno"]
+_data = {
+"Hovering": SubResource("Animation_2qjgf"),
+"RESET": SubResource("Animation_0tem6")
+}
+
+[node name="Key" type="Area2D"]
+script = ExtResource("1_f18f0")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.59375, 0.5625)
+texture = ExtResource("2_6qjpa")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, 0.875)
+scale = Vector2(1.08, 1)
+shape = SubResource("RectangleShape2D_83vtl")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+texture = SubResource("GradientTexture2D_4qc6e")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_6bnno")
+}
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

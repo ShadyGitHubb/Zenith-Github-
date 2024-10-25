@@ -1,6 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://bxdyi3fe1m0j7"]
 
+<<<<<<< Updated upstream
 [ext_resource type="Script" path="res://Scripts/Door.gd" id="1_8opjk"]
+=======
+[ext_resource type="Texture2D" uid="uid://cittu3ysyhwhk" path="res://icon.svg" id="1_gl2sh"]
+[ext_resource type="Script" path="res://Scripts/door_in_to_out.gd" id="1_jycmb"]
+>>>>>>> Stashed changes
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v16yw"]
 

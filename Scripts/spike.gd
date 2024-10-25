@@ -1,6 +1,7 @@
 extends Area2D
 
-
-func _on_body_entered(body):
+# Function that is called when a body enters the area
+func _on_body_entered(body: Node) -> void:
+	# Check if the entered body has a 'die' method and call it if it does
 	if body.has_method("die"):
-		body.die()
+		body.die()  # Call the die method on the body
