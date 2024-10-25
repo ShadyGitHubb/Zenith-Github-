@@ -1,17 +1,17 @@
 extends CharacterBody2D
-
 @onready var global = get_node("/root/Global")
 @export var speed = 35
 var player_chase = false
 var player = null
 var direction = -1
-var gravity = 200
+var gravity = 9.8
 @export var jump_force = -300  # NEW: Added jump force
 @onready var ray_cast_ground = $RayCast2D2
 @onready var ray_cast_forward = $AnimatedSprite2D/RayCast2D
 @onready var soul_link_timer = $SoulLinkTimer  # Declare the Timer variable
 
 func _ready():
+	soul_link_timer = $SoulLinkTimer
 	if soul_link_timer:
 		soul_link_timer.connect("timeout", Callable(self, "_on_soul_link_timeout"))
 		print("SoulLinkTimer connected successfully.")
@@ -23,18 +23,21 @@ func _physics_process(delta):
 		velocity.y += gravity * delta
 	else:
 		velocity.y = 0
+
 	if player_chase:
 		if player.global_position.x < global_position.x - 20:
 			direction = -1
 		elif player.global_position.x > global_position.x + 20:
 			direction = 1
+
 		$AnimatedSprite2D.scale.x = direction
 		velocity.x = speed * direction
+
 		if is_on_floor() and ray_cast_forward.is_colliding() and ray_cast_ground.is_colliding():
 			var collider = ray_cast_forward.get_collider()
 			if collider is TileMap:
 				velocity.y = jump_force
-				play_animation("Jump")
+			play_animation("Jump")
 		elif not is_on_floor():
 			if velocity.y > 0:
 				play_animation("Fall")
@@ -45,7 +48,7 @@ func _physics_process(delta):
 	move_and_slide()
 
 func _on_detection_area_body_entered(body):
-	if body.is_in_group("Player"):
+	if body is Player:
 		player = body
 		player_chase = true
 		if soul_link_timer:
@@ -53,14 +56,15 @@ func _on_detection_area_body_entered(body):
 		play_animation("Walk")
 
 func _on_detection_area_body_exited(body):
-	if body.is_in_group("Player"):
+	if body is Player:
 		player = null
 		player_chase = false
 		if soul_link_timer:
 			soul_link_timer.start(5)  # Start timer with 5 seconds
 
 func _on_soul_link_timeout():
-	get_tree().change_scene_to_file("res://UI/game_over_screen.tscn")  # Handle game over
+	# Handle game over
+	get_tree().change_scene("res://GameOver.tscn")
 
 # Function to handle animation transitions
 func play_animation(animation_name):

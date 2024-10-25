@@ -173,9 +173,9 @@ fill_from = Vector2(0.518293, 0.5)
 fill_to = Vector2(0.27439, 0.719512)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c5hhc"]
-radius = 11.0
+radius = 14.0357
 
-[node name="Player" type="CharacterBody2D" groups=["Player"]]
+[node name="Player" type="CharacterBody2D"]
 collision_layer = 3
 script = ExtResource("1_c7uqj")
 
@@ -184,6 +184,7 @@ position = Vector2(-2, 1)
 scale = Vector2(0.96875, 0.96875)
 sprite_frames = SubResource("SpriteFrames_clk7i")
 animation = &"Attack"
+frame_progress = 0.0737397
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.75, 0)

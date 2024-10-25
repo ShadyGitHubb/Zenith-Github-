@@ -1,6 +1,5 @@
 extends Control
 
-@onready var global = get_node("/root/Global")
 
 func resume():
 	self.hide()
@@ -27,7 +26,6 @@ func _on_resume_pressed():
 
 func _on_restart_pressed():
 	resume()
-	global.reset_score()
 	get_tree().reload_current_scene()
 
 
