@@ -73,7 +73,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_p7w6d"]
-radius = 34.6731
+radius = 50.4007
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c4fki"]
 radius = 3.7006
@@ -81,7 +81,7 @@ radius = 3.7006
 [sub_resource type="CircleShape2D" id="CircleShape2D_rb2hd"]
 radius = 6.66667
 
-[node name="Phantom" type="CharacterBody2D"]
+[node name="Enemy" type="CharacterBody2D"]
 position = Vector2(-1, -10)
 scale = Vector2(1.5, 1.5)
 collision_layer = 3
@@ -91,8 +91,7 @@ script = ExtResource("1_sh1lp")
 position = Vector2(5.96046e-08, 2.66667)
 scale = Vector2(0.653333, 0.68)
 sprite_frames = SubResource("SpriteFrames_mixe6")
-animation = &"Idle"
-frame_progress = 0.0172365
+animation = &"Hovering"
 offset = Vector2(0, -8)
 
 [node name="detection_area" type="Area2D" parent="."]
